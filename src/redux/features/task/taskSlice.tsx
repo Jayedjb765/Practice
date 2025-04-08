@@ -15,6 +15,14 @@ const initialState: InitialState = {
       isCompleted: false,
       priority: "High",
     },
+    {
+      id: "kfjjg",
+      title: "Initilize Forntent",
+      description: "This is the 2nd task",
+      dueDate: "2025-11",
+      isCompleted: false,
+      priority: "Low",
+    },
   ],
   filter: "all",
 };
