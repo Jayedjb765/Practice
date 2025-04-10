@@ -1,6 +1,7 @@
 import { RootState } from "@/redux/store";
 import { ITask } from "@/types";
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
+import { removeUser } from "../user/userSlice";
 
 interface InitialState {
   tasks: ITask[];
@@ -14,13 +15,19 @@ const initialState: InitialState = {
       title: "Task 1",
       description: "Task 1 description",
       priority: "high",
+      assignto: null,
     },
   ],
   filter: "all",
 };
-type DraftTask = Pick<ITask, "title" | "description" | "priority">;
+type DraftTask = Pick<ITask, "title" | "description" | "priority" | "assignto">;
 const createTask = (taskData: DraftTask): ITask => {
-  return { id: nanoid(), isCompleted: false, ...taskData };
+  return {
+    ...taskData,
+    id: nanoid(),
+    isCompleted: false,
+    assignto: taskData.assignto ? taskData.assignto : null,
+  };
 };
 
 const taskSlice = createSlice({
@@ -47,6 +54,13 @@ const taskSlice = createSlice({
     ) => {
       state.filter = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(removeUser, (state, action) => {
+      state.tasks.forEach((task) =>
+        task.assignto == action.payload ? task.assignto == null : task
+      );
+    });
   },
 });
 
